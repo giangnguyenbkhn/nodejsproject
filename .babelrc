@@ -1,0 +1,4 @@
+// cau hinh babel(babel giup bien dich cac phien ban cua js khac nhau ve 1 phien ban chung, 1 nhom lam viec nhieu phien ban)
+{
+  "presets": ["@babel/preset-env"]
+}

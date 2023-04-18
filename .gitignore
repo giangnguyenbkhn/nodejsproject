@@ -1,0 +1,7 @@
+/node_modules
+/vendor
+# php hay co file vendor thu muc goc
+/.idea
+.idea/
+# thu muc chua cache cua php storm,...
+.env

@@ -1,0 +1,10 @@
+const path = require("path");
+// cấu hình sequelizerc
+module.exports = {
+    // set nơi đặt file config.json,migrations,... (chạy node_modules/.bin/sequelize init)
+    // nếu gặp lỗi run powershell admintrator (Set-ExecutionPolicy -ExecutionPolicy Unrestricted)
+    config: path.resolve("./src/config", "config.json"),
+    "migrations-path": path.resolve("./src", "migrations"),
+    "models-path": path.resolve("./src", "models"),
+    "seeders-path": path.resolve("./src", "seeders"),
+};
