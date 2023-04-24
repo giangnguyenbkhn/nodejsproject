@@ -12,12 +12,13 @@ import cors from "cors";
 require("dotenv").config();
 
 let app = express();
-//use cors giup client co the gui request den api cua server
+//use cors giup client co the gui request den api cua chinh server nam tren cung 1 localhost
 app.use(cors({ credentials: true, origin: true }));
 //tham so port
 let port = process.env.PORT || 8080;
 //config app bạn có thể lấy được data form từ req.body(cau hinh cac tham so client gui len)
 app.use(express.json());
+//
 app.use(
   express.urlencoded({
     extended: true,
