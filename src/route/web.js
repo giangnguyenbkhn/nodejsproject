@@ -33,6 +33,9 @@ let initWebRoutes = (app) => {
   router.put("/api/edit-user", userController.handleEditUser);
   //API delete user
   router.delete("/api/delete-user", userController.handleDeleteUser);
+
+  //API getallcodes
+  router.get("/allcode", userController.getAllCode);
   //mac dinh router deu phai bat dau bang /
   return app.use("/", router);
 };

@@ -14,7 +14,7 @@ let handleUserLogin = (email, password) => {
         let user = await db.User.findOne({
           where: { email: email },
           // chi lay ra nhung truong nam trong attributes
-          attributes: ["email", "roleId", "password"],
+          attributes: ["email", "roleId", "firstName", "lastName", "password"],
           raw: true,
         });
         if (user) {
@@ -263,6 +263,30 @@ let deleteUser = (userId) => {
     }
   });
 };
+let getAllCodeService = (typeInput) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!typeInput) {
+        resolve({
+          errCode: 1,
+          errMessage: "Missing Required Parameters",
+        });
+      } else {
+        let res = {};
+        let allcode = await db.Allcode.findAll({
+          where: {
+            type: typeInput,
+          },
+        });
+        res.errCode = 0;
+        res.data = allcode;
+        resolve(res);
+      }
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
 module.exports = {
   handleUserLogin,
   getAllUsers,
@@ -271,4 +295,5 @@ module.exports = {
   createNewUser,
   deleteUser,
   editUser,
+  getAllCodeService,
 };
