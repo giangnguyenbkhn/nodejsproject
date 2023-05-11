@@ -35,7 +35,7 @@ let initWebRoutes = (app) => {
   router.delete("/api/delete-user", userController.handleDeleteUser);
 
   //API getallcodes
-  router.get("/allcode", userController.getAllCode);
+  router.get("/api/allcode", userController.getAllCode);
   //mac dinh router deu phai bat dau bang /
   return app.use("/", router);
 };
