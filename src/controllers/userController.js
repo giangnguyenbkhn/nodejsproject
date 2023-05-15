@@ -81,7 +81,7 @@ let handleCreateNewUser = async (req, res) => {
 //edit user
 let handleEditUser = async (req, res) => {
   let data = req.body;
-  if (!req.body.id) {
+  if (!data.id || !data.roleId || !data.positionId || !data.gender) {
     return res.status(200).json({
       errCode: 2,
       message: "Missing required parameter",
