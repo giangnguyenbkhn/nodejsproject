@@ -223,6 +223,7 @@ let editUser = (data) => {
             positionId: data.positionId,
             roleId: data.roleId,
             phonenumber: data.phonenumber,
+            image: data.avatar,
           },
           {
             where: {

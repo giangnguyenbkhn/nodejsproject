@@ -17,11 +17,13 @@ app.use(cors({ credentials: true, origin: true }));
 //tham so port
 let port = process.env.PORT || 8080;
 //config app bạn có thể lấy được data form từ req.body(cau hinh cac tham so client gui len)
-app.use(express.json());
+//limit de co the gui file len server tu fe
+app.use(express.json({ limit: "50mb" }));
 //
 app.use(
   express.urlencoded({
     extended: true,
+    limit: "50mb",
   })
 );
 
