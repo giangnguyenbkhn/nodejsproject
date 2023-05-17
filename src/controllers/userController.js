@@ -44,7 +44,7 @@ let handleGetAllUsers = async (req, res) => {
 
 //get user by key
 let handleGetUserByKey = async (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
   if (!req.body) {
     return res.status(200).json({
       errCode: 1,
