@@ -38,6 +38,13 @@ let initWebRoutes = (app) => {
   //API getallcodes
   router.get("/api/allcode", userController.getAllCode);
   router.get("/api/top-doctor-home", doctorController.getTopDoctorHome);
+  //get all user in select react
+  router.get("/api/get-all-doctors", doctorController.getAllDoctors);
+  router.post("/api/save-infor-doctor", doctorController.postInforDoctor);
+  router.get(
+    "/api/get-detail-doctor-by-id",
+    doctorController.getDetailDoctorById
+  );
   //mac dinh router deu phai bat dau bang /
   return app.use("/", router);
 };
