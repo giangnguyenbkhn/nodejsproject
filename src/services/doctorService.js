@@ -87,7 +87,7 @@ let getDetailDoctorService = (doctorId) => {
         let data = await db.User.findOne({
           where: { id: doctorId },
           attributes: {
-            exclude: ["password", "image"],
+            exclude: ["password"],
           },
           //doan include nay la doan join 2 table
           include: [
@@ -104,6 +104,13 @@ let getDetailDoctorService = (doctorId) => {
           raw: true,
           nest: true,
         });
+        //decoded image ben nodejs
+        if (data && data.image) {
+          data.image = new Buffer.from(data.image, "base64").toString("binary");
+        }
+        if (!data) {
+          data = {};
+        }
         resolve({ errCode: 0, data: data });
       }
     } catch (error) {
