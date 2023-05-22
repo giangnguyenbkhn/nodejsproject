@@ -55,16 +55,28 @@ let saveInforDoctor = (inputData) => {
       if (
         !inputData.doctorId ||
         !inputData.contentHTML ||
-        !inputData.contentMarkdown
+        !inputData.contentMarkdown ||
+        !inputData.action
       ) {
         resolve({ errCode: 1, errMessage: "Missing parameter" });
       } else {
-        await db.Markdown.create({
-          contentMarkdown: inputData.contentMarkdown,
-          contentHTML: inputData.contentHTML,
-          description: inputData.description,
-          doctorId: inputData.doctorId,
-        });
+        if (inputData.action === "CREATE") {
+          await db.Markdown.create({
+            contentMarkdown: inputData.contentMarkdown,
+            contentHTML: inputData.contentHTML,
+            description: inputData.description,
+            doctorId: inputData.doctorId,
+          });
+        } else if (inputData.action === "EDIT") {
+          await db.Markdown.update(
+            {
+              contentMarkdown: inputData.contentMarkdown,
+              contentHTML: inputData.contentHTML,
+              description: inputData.description,
+            },
+            { where: { doctorId: inputData.doctorId } }
+          );
+        }
         resolve({
           errCode: 0,
           errMessage: "Save infor doctor success",
