@@ -60,9 +60,24 @@ let getDetailDoctorById = async (req, res) => {
     });
   }
 };
+//bulk schedule
+let bulkCreateSchedule = async (req, res) => {
+  try {
+    let response = await doctorService.bulkCreateScheduleService(req.body);
+    return res.status(200).json({
+      response,
+    });
+  } catch (error) {
+    return res.status(200).json({
+      errCode: -1,
+      errMessage: "Err from server",
+    });
+  }
+};
 module.exports = {
   getTopDoctorHome: getTopDoctorHome,
   getAllDoctors: getAllDoctors,
   postInforDoctor: postInforDoctor,
   getDetailDoctorById: getDetailDoctorById,
+  bulkCreateSchedule: bulkCreateSchedule,
 };

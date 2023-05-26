@@ -1,4 +1,8 @@
+import { differenceBy, differenceWith } from "lodash";
 import db from "../models";
+require("dotenv").config();
+// gioi han so ng dat don kham benh cua 1 bac si
+const MAX_NUMBER_SCHEDULE = process.env.MAX_NUMBER_SCHEDULE;
 let getTopDoctorHome = (limit) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -130,10 +134,65 @@ let getDetailDoctorService = (doctorId) => {
     }
   });
 };
+let bulkCreateScheduleService = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      // console.log(data.arrSchedule);
+      if (!data.arrSchedule || !data.doctorId || !data.date) {
+        resolve({
+          errCode: 1,
+          errMessage: "Missing required parameters !",
+        });
+      } else {
+        let schedule = data.arrSchedule;
+        // console.log(schedule);
+        //them thuoc tinh maxnumber de luu xuong database
+        if (schedule && schedule.length > 0) {
+          schedule = schedule.map((item) => {
+            item.maxNumber = MAX_NUMBER_SCHEDULE;
+            return item;
+          });
+        }
+        console.log("data send", schedule);
+        //get all existing data
+        let existing = await db.Schedule.findAll({
+          where: { doctorId: data.doctorId, date: data.date },
+          attributes: ["timeType", "date", "doctorId", "maxNumber"],
+        });
+        // console.log(existing);
+        //truong hop da co data o csdl =>convert date
+        if (existing && existing.length > 0) {
+          existing = existing.map((item) => {
+            item.date = new Date(item.date).getTime();
+            return item;
+          });
+        }
+        //check xem gia tri moi va gia tri cu da co san trong bang cua 1 bac si co trung thoi gian khong de trach viec luu trung lap data
+        // ham differenceWith tra ve cac gia tri khac voi dieu kien dua ra, 1 mang moi ngoai tru phan tu da co o phia database
+        //compare difference, co su khac nhau tra cac gia tri ve toCreate
+        let toCreate = differenceWith(schedule, existing, (a, b) => {
+          return a.timeType === b.timeType && a.date === b.date;
+        });
+        //create data(neu co su khac nhau timeType + date giua (database va du lieu truyen len))
+        if (toCreate && toCreate.length > 0) {
+          await db.Schedule.bulkCreate(toCreate);
+        }
+        // console.log("check khac nhau ", toCreate);
 
+        resolve({
+          errCode: 0,
+          errMessage: "OK",
+        });
+      }
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
 module.exports = {
   getTopDoctorHome: getTopDoctorHome,
   getAllDoctors: getAllDoctors,
   saveInforDoctor: saveInforDoctor,
   getDetailDoctorService: getDetailDoctorService,
+  bulkCreateScheduleService: bulkCreateScheduleService,
 };

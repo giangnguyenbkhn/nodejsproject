@@ -45,6 +45,8 @@ let initWebRoutes = (app) => {
     "/api/get-detail-doctor-by-id",
     doctorController.getDetailDoctorById
   );
+
+  router.post("/api/bulk-create-schedule", doctorController.bulkCreateSchedule);
   //mac dinh router deu phai bat dau bang /
   return app.use("/", router);
 };
