@@ -153,7 +153,7 @@ let bulkCreateScheduleService = (data) => {
             return item;
           });
         }
-        console.log("data send", schedule);
+        // console.log("data send", schedule);
         //get all existing data
         let existing = await db.Schedule.findAll({
           where: { doctorId: data.doctorId, date: data.date },
@@ -161,17 +161,21 @@ let bulkCreateScheduleService = (data) => {
         });
         // console.log(existing);
         //truong hop da co data o csdl =>convert date
-        if (existing && existing.length > 0) {
-          existing = existing.map((item) => {
-            item.date = new Date(item.date).getTime();
-            return item;
-          });
-        }
+        //khong can convert nua tai vi da sua lai database cho kieu du lieu thoi gian la timestamp (duoi dang unix)
+        // if (existing && existing.length > 0) {
+        //   existing = existing.map((item) => {
+        //     item.date = new Date(item.date).getTime();
+        //     return item;
+        //   });
+        // }
         //check xem gia tri moi va gia tri cu da co san trong bang cua 1 bac si co trung thoi gian khong de trach viec luu trung lap data
         // ham differenceWith tra ve cac gia tri khac voi dieu kien dua ra, 1 mang moi ngoai tru phan tu da co o phia database
         //compare difference, co su khac nhau tra cac gia tri ve toCreate
+        // console.log("check existing", existing);
+        // console.log("check create", schedule);
+
         let toCreate = differenceWith(schedule, existing, (a, b) => {
-          return a.timeType === b.timeType && a.date === b.date;
+          return a.timeType === b.timeType && +a.date === +b.date;
         });
         //create data(neu co su khac nhau timeType + date giua (database va du lieu truyen len))
         if (toCreate && toCreate.length > 0) {
@@ -181,7 +185,7 @@ let bulkCreateScheduleService = (data) => {
 
         resolve({
           errCode: 0,
-          errMessage: "OK",
+          errMessage: "OK conde",
         });
       }
     } catch (error) {
@@ -205,6 +209,15 @@ let getScheduleByDateService = (doctorId, date) => {
             doctorId: doctorId,
             date: date,
           },
+          include: [
+            {
+              model: db.Allcode,
+              as: "timeTypeData",
+              attributes: ["valueEn", "valueVi"],
+            },
+          ],
+          raw: false,
+          nest: true,
         });
 
         if (!dataSchedule) dataSchedule = [];
